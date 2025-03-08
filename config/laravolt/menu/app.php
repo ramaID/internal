@@ -9,6 +9,11 @@ return [
                 'active' => 'home/*',
                 'icon' => 'home',
             ],
+            'Project' => [
+                'url' => '/resource/project',
+                'active' => '/resource/project/*',
+                'icon' => 'folder',
+            ],
         ],
     ],
 ];

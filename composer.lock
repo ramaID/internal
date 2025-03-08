@@ -5302,16 +5302,16 @@
         },
         {
             "name": "ramaid/laravolt",
-            "version": "6.0.1",
+            "version": "6.0.5",
             "source": {
                 "type": "git",
                 "url": "https://github.com/ramaID/laravolt.git",
-                "reference": "27d5050391f5fcebda15690059bdb6541e0c7252"
+                "reference": "33c2740f950a753bf4432c7e5c4a0a77d804eab2"
             },
             "dist": {
                 "type": "zip",
-                "url": "https://api.github.com/repos/ramaID/laravolt/zipball/27d5050391f5fcebda15690059bdb6541e0c7252",
-                "reference": "27d5050391f5fcebda15690059bdb6541e0c7252",
+                "url": "https://api.github.com/repos/ramaID/laravolt/zipball/33c2740f950a753bf4432c7e5c4a0a77d804eab2",
+                "reference": "33c2740f950a753bf4432c7e5c4a0a77d804eab2",
                 "shasum": ""
             },
             "require": {
@@ -5414,9 +5414,9 @@
             ],
             "description": "Personal usage of Laravolt Platform.",
             "support": {
-                "source": "https://github.com/ramaID/laravolt/tree/6.0.1"
+                "source": "https://github.com/ramaID/laravolt/tree/6.0.5"
             },
-            "time": "2025-03-07T16:05:09+00:00"
+            "time": "2025-03-08T06:32:49+00:00"
         },
         {
             "name": "ramsey/collection",
