@@ -5,6 +5,10 @@ services:
       - '.:/var/www/html'
     networks:
       - proxy
+  redis:
+    image: redis:alpine
+    networks:
+      - proxy
 networks:
   proxy:
     driver: bridge
