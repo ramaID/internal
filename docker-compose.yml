@@ -1,0 +1,11 @@
+services:
+  php:
+    image: ramageek/image:php8.3-laravel
+    volumes:
+      - '.:/var/www/html'
+    networks:
+      - proxy
+networks:
+  proxy:
+    driver: bridge
+    external: true

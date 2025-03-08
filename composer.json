@@ -1,9 +1,10 @@
 {
     "$schema": "https://getcomposer.org/schema.json",
-    "name": "laravel/laravel",
+    "name": "ramaid/internal",
     "type": "project",
-    "description": "The skeleton application for the Laravel framework.",
+    "description": "Showcase application demonstrating Laravel 12 and Laravolt 6 integration with modern web features",
     "keywords": [
+        "laravolt",
         "laravel",
         "framework"
     ],
@@ -11,7 +12,8 @@
     "require": {
         "php": "^8.2",
         "laravel/framework": "^12.0",
-        "laravel/tinker": "^2.10.1"
+        "laravel/tinker": "^2.10.1",
+        "ramaid/laravolt": "^6.0"
     },
     "require-dev": {
         "fakerphp/faker": "^1.23",
@@ -20,7 +22,8 @@
         "laravel/sail": "^1.41",
         "mockery/mockery": "^1.6",
         "nunomaduro/collision": "^8.6",
-        "phpunit/phpunit": "^11.5.3"
+        "phpunit/phpunit": "^11.5.3",
+        "spaze/phpstan-disallowed-calls": "^4.4"
     },
     "autoload": {
         "psr-4": {
@@ -52,7 +55,11 @@
         ],
         "dev": [
             "Composer\\Config::disableProcessTimeout",
-            "npx concurrently -c \"#93c5fd,#c4b5fd,#fb7185,#fdba74\" \"php artisan serve\" \"php artisan queue:listen --tries=1\" \"php artisan pail --timeout=0\" \"npm run dev\" --names=server,queue,logs,vite"
+            "npx concurrently -c \"#93c5fd,#c4b5fd,#fb7185,#fdba74\" \"php artisan serve\" \"php artisan queue:listen --tries=1\" \"php artisan pail --timeout=0\" --names=server,queue,logs"
+        ],
+        "qc": [
+            "Composer\\Config::disableProcessTimeout",
+            "npx concurrently -c \"#93c5fd,#c4b5fd,#fb7185,#fdba74\" \"XDEBUG_MODE=coverage php artisan test --coverage\" \"./vendor/bin/phpstan analyse --memory-limit=2G\" \"./vendor/bin/pint\" --names=phpunit,phpstan,pint"
         ]
     },
     "extra": {
