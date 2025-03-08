@@ -13,6 +13,7 @@ return [
                 'url' => '/resource/report',
                 'active' => '/resource/report/*',
                 'icon' => 'chart-pie',
+                'permissions' => ['laravolt::manage-system'],
             ],
         ],
     ],
