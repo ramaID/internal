@@ -2,17 +2,42 @@
 
 namespace App\Http\Livewire\Table;
 
+use Laravolt\Fields\Field;
 use Laravolt\Suitable\Columns\Text;
 use Laravolt\Suitable\Columns\Button;
+use Illuminate\Database\Eloquent\Model;
+use Laravolt\AutoCrud\SchemaTransformer;
 use Laravolt\AutoCrud\Tables\ResourceTable;
-use Illuminate\Pagination\LengthAwarePaginator;
 
 class ProjectTable extends ResourceTable
 {
     public function data()
     {
-        /** @var LengthAwarePaginator */
-        $data = parent::data();
+        $transformer = new SchemaTransformer($this->resource);
+
+        $this->fields = $transformer->getFieldsForIndex();
+
+        /** @var Model $model */
+        $model = app($this->resource['model']);
+        $searchableFields = $this->fields
+            ->reject(fn ($item) => $item['type'] === Field::BELONGS_TO && ! isset($item['searchable']))
+            ->reject(function ($item) {
+                return ($item['searchable'] ?? true) === false;
+            })
+            ->transform(function ($item) {
+                if ($item['type'] === Field::BELONGS_TO) {
+                    $item['name'] .= '.'.$item['searchable'];
+                }
+
+                return $item;
+            })
+            ->pluck('name')
+            ->toArray();
+
+        $data = $model->newQuery()
+            ->orderBy('id', 'desc')
+            ->whereLike($searchableFields, $this->search)
+            ->paginate();
 
         $newData = $data->getCollection()->map(function ($item) {
             $subtitle = json_decode($item->subtitle)[0];
