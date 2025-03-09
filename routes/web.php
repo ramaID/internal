@@ -1,9 +1,9 @@
 <?php
 
 use App\Http\Controllers\Home;
+use App\Http\Controllers\ProcessingSubtitleController;
 use Illuminate\Support\Facades\Route;
 
-\Laravolt\Platform\Services\SidebarMenu::class;
 /*
 |--------------------------------------------------------------------------
 | Web Routes
@@ -19,5 +19,8 @@ Route::redirect('/', 'auth/login');
 
 Route::middleware(['auth', 'verified'])->group(fn () => Route::get('/home', Home::class)->name('home'));
 
-include __DIR__.'/auth.php';
-include __DIR__.'/my.php';
+include_once __DIR__.'/auth.php';
+include_once __DIR__.'/my.php';
+
+Route::get('/resource/project/processing-subtitle/{media}', ProcessingSubtitleController::class)
+    ->name('resource.project.processing-subtitle');

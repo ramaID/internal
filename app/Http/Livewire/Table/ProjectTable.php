@@ -16,7 +16,11 @@ class ProjectTable extends ResourceTable
 
         $newData = $data->getCollection()->map(function ($item) {
             $subtitle = json_decode($item->subtitle)[0];
+            $media = $this->extractIdFromMediaUrl($subtitle);
+
             $item->subtitle = $subtitle;
+            $item->processing = route('resource.project.processing-subtitle', $media);
+
             return $item;
         });
 
@@ -30,7 +34,18 @@ class ProjectTable extends ResourceTable
 
         $columns[] = Text::make('name', 'Name');
         $columns[] = Button::make('subtitle', 'Subtitle')->icon('file');
+        $columns[] = Button::make('processing', 'Processing')->icon('magic');
 
         return $columns;
     }
+
+    protected function extractIdFromMediaUrl($url)
+     {
+         // Example implementation - adjust regex pattern based on your URL structure
+         if (preg_match('#/storage/(\d+)/#', $url, $matches)) {
+             return $matches[1];
+         }
+
+         return null;
+     }
 }
