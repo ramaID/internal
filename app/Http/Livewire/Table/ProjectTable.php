@@ -45,6 +45,7 @@ class ProjectTable extends ResourceTable
 
             $item->subtitle = $subtitle;
             $item->processing = route('resource.project.processing-subtitle', $media);
+            $item->ai_processing = route('resource.project.ai-translation', $media);
 
             return $item;
         });
@@ -59,7 +60,8 @@ class ProjectTable extends ResourceTable
 
         $columns[] = Text::make('name', 'Name');
         $columns[] = Button::make('subtitle', 'Subtitle')->icon('file');
-        $columns[] = Button::make('processing', 'Processing')->icon('magic');
+        $columns[] = Button::make('processing', 'Text Corrections')->icon('wrench');
+        $columns[] = Button::make('ai_processing', 'AI Translation')->icon('magic');
 
         return $columns;
     }
