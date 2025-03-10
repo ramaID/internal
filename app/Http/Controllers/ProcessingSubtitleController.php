@@ -2,17 +2,22 @@
 
 namespace App\Http\Controllers;
 
+use App\Services\TextProcessing;
 use Illuminate\Http\Request;
 use Spatie\MediaLibrary\MediaCollections\Models\Media;
 
 class ProcessingSubtitleController extends Controller
 {
+    public function __construct(
+        public TextProcessing $textService
+    ) {
+    }
+
     /**
      * Handle the incoming request.
      */
     public function __invoke(Media $media, Request $request)
     {
-        \Laravolt\SemanticForm\SemanticForm::class;
         $title = 'Processing Subtitle: ' . $media->id;
 
         $stream = $media->stream();
@@ -20,75 +25,13 @@ class ProcessingSubtitleController extends Controller
         // Close the stream after reading
         fclose($stream);
 
-        $subtitles = $this->parseSbvToJson($content);
+        $subtitles = $this->textService->parseSbvToJson($content);
         $vocabularies = $this->getVocabularies();
 
         // Generate suggested vocabularies based on subtitle content
         $suggestedVocabularies = $this->suggestVocabularies($subtitles);
 
         return view('processing-subtitle', compact('title', 'subtitles', 'vocabularies', 'suggestedVocabularies'));
-    }
-
-    /**
-     * Parse SBV content to JSON format
-     *
-     * @param string $sbvContent
-     * @return array
-     */
-    private function parseSbvToJson(string $sbvContent): array
-    {
-        $lines = explode("\n", $sbvContent);
-        $subtitles = [];
-        $currentSubtitle = null;
-
-        foreach ($lines as $line) {
-            $line = trim($line);
-
-            if (empty($line)) {
-                // Empty line indicates end of current subtitle entry
-                if ($currentSubtitle !== null) {
-                    $subtitles[] = $currentSubtitle;
-                    $currentSubtitle = null;
-                }
-                continue;
-            }
-
-            // Check if line is a timestamp
-            if (preg_match('/^\d+:\d+:\d+\.\d+,\d+:\d+:\d+\.\d+$/', $line)) {
-                list($start, $end) = explode(',', $line);
-                $currentSubtitle = [
-                    'start_time' => $this->formatTimestamp($start),
-                    'end_time' => $this->formatTimestamp($end),
-                    'text' => ''
-                ];
-            } elseif ($currentSubtitle !== null) {
-                // Add text to current subtitle
-                if (!empty($currentSubtitle['text'])) {
-                    $currentSubtitle['text'] .= ' ' . $line;
-                } else {
-                    $currentSubtitle['text'] = $line;
-                }
-            }
-        }
-
-        // Add the last subtitle if there is one
-        if ($currentSubtitle !== null) {
-            $subtitles[] = $currentSubtitle;
-        }
-
-        return $subtitles;
-    }
-
-    /**
-     * Format timestamp for better readability (optional)
-     *
-     * @param string $timestamp
-     * @return string
-     */
-    private function formatTimestamp(string $timestamp): string
-    {
-        // You can customize timestamp formatting here if needed
-        return $timestamp;
     }
 
     protected function getVocabularies(): array
